@@ -1,0 +1,64 @@
+//------------------------------------------------
+//--- 010 Editor v2.1.3 Binary Template
+//
+//      File: DBF.bt
+//   Authors: A Norman
+//   Version: 0.3
+//   Purpose: Parses .dbf (database) format files.
+//  Category: Database
+// File Mask: *.dbf
+//  ID Bytes: 
+//   History: 
+//   0.3   2023-08-01 spaceraccoon: Optimized for FormatFuzzer.
+//   0.2   2016-01-29 SweetScape: Updated header for repository submission.
+//   0.1   A Norman: Initial release.
+//------------------------------------------------
+
+string yearFrom1900 (char yy)
+{
+string s;
+SPrintf(s, "%d", 1900 + yy);
+return s;
+}
+
+struct DBF {
+	struct HEADER {
+		char version;
+		struct DATE_OF_LAST_UPDATE {
+			char yy <read=yearFrom1900,format=decimal>;
+			char mm <format=decimal>;
+			char dd <format=decimal>;
+		} DateOfLastUpdate;
+		int	numberOfRecords;
+		short	lengthOfHeaderStructure;
+		short	lengthOfEachRecord;
+		char	reserved[2];
+		char	incompleteTrasaction <format=decimal>;
+		char	encryptionFlag <format=decimal>;
+		int	freeRecordThread;
+		int	reserved1[2];
+		char	mdxFlag <format=decimal>;
+		char	languageDriver <format=decimal>;
+		short	reserved2;
+	} header;
+	struct FIELD {
+		char fieldName[11];
+		char fieldType = { 'C', 'D', 'F', 'L', 'M', 'N' };
+		char fieldType;
+		int  fieldDataAddress;
+		char fieldLength <format=decimal>;
+		char decimalCount <format=decimal>;
+		short reserved;
+		char  workAreaId <format=decimal>;
+		short	reserved1;
+		char	flags <format=hex>;
+		char	reserved2[7];
+		char	indexFieldFlag <format=decimal>;
+    } field[(header.lengthOfHeaderStructure-33)/32];
+	char	Terminator <format=hex>;
+	struct RECORD {
+		char	deletedFlag;
+		char	fields[header.lengthOfEachRecord-1];
+	} record [ header.numberOfRecords ] <optimize=false>;
+	char    EndOfFile = { 0x1A } <format=hex>;
+} dbf <optimize=false>;

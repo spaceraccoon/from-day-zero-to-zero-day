@@ -1,0 +1,13 @@
+rules:
+- id: express-injection
+  mode: taint
+  pattern-sources:
+    - pattern: req.query.$PARAMETER
+  pattern-sinks:
+    - pattern: execSync(...)
+  message: Passing user-controlled Express query parameter to a command injection.
+  languages:
+    - javascript
+  severity: ERROR
+  metadata:
+    interfile: true

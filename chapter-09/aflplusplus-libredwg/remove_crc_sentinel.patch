@@ -1,0 +1,141 @@
+diff --git a/src/bits.c b/src/bits.c
+index edf4e6d9..10bb3dda 100644
+--- a/src/bits.c
++++ b/src/bits.c
+@@ -1497,7 +1497,7 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
+     {
+       LOG_WARN ("check_CRC mismatch %lu-%lu = %ld: %04X <=> %04X\n",
+                 start_address, dat->byte - 2, size, calculated, read)
+-      return 0;
++      return 1;
+     }
+ }
+ 
+diff --git a/src/decode.c b/src/decode.c
+index b24d1cf9..f5905e9f 100644
+--- a/src/decode.c
++++ b/src/decode.c
+@@ -345,7 +345,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+   if (crc != crc2)
+     {
+       LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crc2);
+-      error |= DWG_ERR_WRONGCRC;
++      // error |= DWG_ERR_WRONGCRC;
+     }
+ 
+   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END)))
+@@ -524,7 +524,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+       LOG_WARN ("Header Section[%ld] CRC mismatch %04X <=> %04X",
+                 (long)dwg->header.section[SECTION_HEADER_R13].number, crc,
+                 crc2);
+-      error |= DWG_ERR_WRONGCRC;
++      // error |= DWG_ERR_WRONGCRC;
+     }
+ 
+   /*-------------------------------------------------------------------------
+@@ -687,8 +687,8 @@ classes_section:
+               + dwg->header.section[SECTION_CLASSES_R13].size - 18;
+   dat->bit = 0;
+   pvz = dwg->header.section[SECTION_CLASSES_R13].address + 16;
+-  if (!bit_check_CRC (dat, pvz, 0xC0C1))
+-    error |= DWG_ERR_WRONGCRC;
++  // if (!bit_check_CRC (dat, pvz, 0xC0C1))
++    // error |= DWG_ERR_WRONGCRC;
+ 
+   dat->byte += 16;         // sentinel
+   pvz = bit_read_RL (dat); // Unknown bitlong inter class and object
+@@ -821,8 +821,8 @@ handles_section:
+           // fails with r14
+           // if (dwg->header.version == R_2000)
+           //  return DWG_ERR_WRONGCRC;
+-          if (dat->from_version != R_14)
+-            error |= DWG_ERR_WRONGCRC;
++          // if (dat->from_version != R_14)
++          //   error |= DWG_ERR_WRONGCRC;
+         }
+       if (dat->byte >= lastmap)
+         break;
+@@ -2552,7 +2552,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+           LOG_WARN ("Handles page CRC: %04X vs calc. %04X from %lu-%lu=%ld\n",
+                     crc2, crc1, startpos, hdl_dat.byte - 2,
+                     hdl_dat.byte - startpos - 2);
+-          error |= DWG_ERR_WRONGCRC;
++          // error |= DWG_ERR_WRONGCRC;
+         }
+ #endif
+ 
+@@ -3330,7 +3330,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
+     else
+       {
+         LOG_WARN ("checksum: 0x%08x (calculated) mismatch\n", checksum);
+-        error |= DWG_ERR_WRONGCRC;
++        // error |= DWG_ERR_WRONGCRC;
+       }
+   }
+   return error;
+@@ -5536,8 +5536,8 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
+       bit_advance_position (dat, r);
+     }
+   bit_set_position (dat, (obj->address + obj->size) * 8 - 2);
+-  if (!bit_check_CRC (dat, address, 0xC0C1))
+-    error |= DWG_ERR_WRONGCRC;
++  // if (!bit_check_CRC (dat, address, 0xC0C1))
++    // error |= DWG_ERR_WRONGCRC;
+ 
+   /* Reset to previous addresses for return */
+   *dat = abs_dat;
+@@ -6173,7 +6173,7 @@ decode_preR13_sentinel (Dwg_Sentinel sentinel,
+   if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
+     {
+       LOG_ERROR ("%s mismatch", sentinel_name);
+-      error = DWG_ERR_WRONGCRC;
++      // error = DWG_ERR_WRONGCRC;
+     }
+   free (r11_sentinel);
+ 
+@@ -6285,7 +6285,7 @@ decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+   if (crc != crcc)
+     {
+       LOG_ERROR ("AUX header CRC mismatch %04X <=> %04X", crc, crcc);
+-      error |= DWG_ERR_WRONGCRC;
++      // error |= DWG_ERR_WRONGCRC;
+     }
+   error
+       |= decode_preR13_sentinel (DWG_SENTINEL_R11_AUX_HEADER_END,
+@@ -6563,8 +6563,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
+                       if (obj->address + obj->size >= start && start > 60)
+                         dat->byte = obj->address + obj->size - 2;
+                     }
+-                  if (!bit_check_CRC (dat, obj->address, 0xC0C1))
+-                    error |= DWG_ERR_WRONGCRC;
++                  // if (!bit_check_CRC (dat, obj->address, 0xC0C1))
++                  //   error |= DWG_ERR_WRONGCRC;
+                 }
+               }
+             }
+diff --git a/src/decode_r11.c b/src/decode_r11.c
+index c6c3c841..cd1e9cb8 100644
+--- a/src/decode_r11.c
++++ b/src/decode_r11.c
+@@ -701,7 +701,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+     if (crc != crcc)
+       {
+         LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crcc);
+-        error |= DWG_ERR_WRONGCRC;
++        // error |= DWG_ERR_WRONGCRC;
+       }
+   }
+ 
+diff --git a/src/decode_r2007.c b/src/decode_r2007.c
+index d7f894d7..e81ce2af 100644
+--- a/src/decode_r2007.c
++++ b/src/decode_r2007.c
+@@ -1782,7 +1782,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
+           LOG_WARN ("Handles section page CRC mismatch: %04X vs calc. %04X "
+                     "from %lx-%lx\n",
+                     crc2, crc1, startpos, hdl_dat.byte - 2);
+-          error |= DWG_ERR_WRONGCRC;
++          // error |= DWG_ERR_WRONGCRC;
+         }
+ #endif
+ 
