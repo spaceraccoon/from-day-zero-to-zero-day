@@ -1,0 +1,3 @@
+[submodule "chapter-02/sonic-buildimage"]
+	path = chapter-02/sonic-buildimage
+	url = https://github.com/spaceraccoon/sonic-buildimage.git
