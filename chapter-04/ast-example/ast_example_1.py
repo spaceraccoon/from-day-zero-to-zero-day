@@ -1,8 +1,8 @@
-import ast 
+import ast
 
 # Python source code to convert to AST
 code = """
-name = 'World' 
+name = 'World'
 print('Hello,' + name)
 """
 
