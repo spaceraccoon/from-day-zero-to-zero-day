@@ -1,3 +1,6 @@
 [submodule "chapter-02/sonic-buildimage"]
 	path = chapter-02/sonic-buildimage
 	url = https://github.com/spaceraccoon/sonic-buildimage.git
+[submodule "chapter-04/cve-2021-46143/libexpat"]
+	path = chapter-04/cve-2021-46143/libexpat
+	url = https://github.com/spaceraccoon/libexpat.git
