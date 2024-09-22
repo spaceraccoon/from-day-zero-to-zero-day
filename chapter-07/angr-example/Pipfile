@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-angr = "*"
+angr = "===9.2.108"
 
 [dev-packages]
 
