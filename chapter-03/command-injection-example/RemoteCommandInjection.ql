@@ -13,11 +13,11 @@ class MyConfig extends TaintTracking::Configuration {
   MyConfig() { this = "MyConfig" }
 
   override predicate isSource(DataFlow::Node source) {
-    (@\codewingding{1}@)source instanceof RemoteFlowSource
+    source instanceof RemoteFlowSource
   }
 
   override predicate isSink(DataFlow::Node sink) {
-    (@\codewingding{2}@)sink = any(SystemCommandExecution sys).getACommandArgument()
+    sink = any(SystemCommandExecution sys).getACommandArgument()
   }
 }
  
