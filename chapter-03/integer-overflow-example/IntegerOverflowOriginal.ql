@@ -23,11 +23,10 @@ module IntegerOverflowConfig implements DataFlow::ConfigSig {
     }
 
     predicate isSink(DataFlow::Node sink) {
-        exists(Expr e, ExprCall ec, MacroInvocation mi | e = sink.asExpr() |
-            ec = mi.getExpr() and
-            mi.getMacroName() = "REALLOC" and
-            e = ec.getAnArgument() and
-            e.getUnspecifiedType() instanceof IntegralType
+        exists(Expr e, HeuristicAllocationExpr alloc | e = sink.asConvertedExpr() |
+            e = alloc.getAChild() and
+            e.getUnspecifiedType() instanceof IntegralType and
+            not e instanceof Conversion
         )
     }
 }

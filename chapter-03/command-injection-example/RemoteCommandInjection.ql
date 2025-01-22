@@ -7,21 +7,24 @@
  */
 
 import javascript
-import DataFlow::PathGraph
 
-class MyConfig extends TaintTracking::Configuration {
-  MyConfig() { this = "MyConfig" }
+module RemoteCommandInjectionConfig implements DataFlow::ConfigSig { 
+    predicate isSource(DataFlow::Node source) {
+        source instanceof RemoteFlowSource
+    }
 
-  override predicate isSource(DataFlow::Node source) {
-    source instanceof RemoteFlowSource
-  }
-
-  override predicate isSink(DataFlow::Node sink) {
-    sink = any(SystemCommandExecution sys).getACommandArgument()
-  }
+    predicate isSink(DataFlow::Node sink) {
+        sink = any(SystemCommandExecution sys).getACommandArgument()
+    }
 }
- 
-from MyConfig cfg, DataFlow::PathNode source, DataFlow::PathNode sink
-where cfg.hasFlowPath(source, sink)
-select sink, source, sink, 
-"taint from $@ to $@.", source, "source", sink, "sink"
+
+module RemoteCommandInjectionFlow = TaintTracking::
+    Global<RemoteCommandInjectionConfig>;
+
+import RemoteCommandInjectionFlow::PathGraph
+
+from RemoteCommandInjectionFlow::PathNode source,
+    RemoteCommandInjectionFlow::PathNode sink
+where RemoteCommandInjectionFlow::flowPath(source, sink)
+select sink.getNode(), source, sink,
+    "taint from $@ to $@.", source.getNode(), "source", sink, "sink"
