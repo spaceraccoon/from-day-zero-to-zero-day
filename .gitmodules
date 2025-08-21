@@ -4,12 +4,6 @@
 [submodule "chapter-03/cve-2021-46143/libexpat"]
         path = chapter-03/cve-2021-46143/libexpat
         url = https://github.com/spaceraccoon/libexpat.git
-[submodule "chapter-04/cve-2021-46143/libexpat"]
-        path = chapter-04/cve-2021-46143/libexpat
-        url = https://github.com/spaceraccoon/libexpat.git
 [submodule "chapter-08/aflplusplus-libredwg/libredwg"]
         path = chapter-08/aflplusplus-libredwg/libredwg
-        url = https://github.com/spaceraccoon/libredwg.git
-[submodule "chapter-09/aflplusplus-libredwg/libredwg"]
-        path = chapter-09/aflplusplus-libredwg/libredwg
         url = https://github.com/spaceraccoon/libredwg.git
