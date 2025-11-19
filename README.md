@@ -24,15 +24,12 @@ Tech changes constantly, especially the tools used in vulnerability research. Wh
 ### Chapter 05
 
 * FreshTomato's website no longer hosts older versions used in the examples. As such, a copy of `freshtomato-AC1450-ARM_NG-2022.5-AIO-64K.zip` has been added to [this repo](https://github.com/spaceraccoon/from-day-zero-to-zero-day/blob/main/chapter-05/freshtomato-AC1450-ARM_NG-2022.5-AIO-64K.zip). Thanks @jbmls!
+* Later versions of Frida introducing breaking changes to the API that may cause the `hook.py` script to fail with errors such as `frida.ProcessNotRespondingError`. While you may want to adapt your script for newer versions of Frida, you can get the examples to work by downgrading with `pip install frida-tools==10.8.0`. Thanks @pudii!
 
 ### Chapter 06
 
 * FreshTomato's website no longer hosts older versions used in the examples. As such, a copy of `freshtomato-RT-N66U_RT-AC6x-2022.5-AIO-64K.zip` has been added to [this repo](https://github.com/spaceraccoon/from-day-zero-to-zero-day/blob/main/chapter-06/freshtomato-RT-N66U_RT-AC6x-2022.5-AIO-64K.zip). Thanks @0xdea!
 * A newer Ghidra plugin, [Cartographer](https://github.com/nccgroup/Cartographer), supports the drcov version 3 format and is a decent alternative to Lightkeeper used in the book, which only supports version 2. Always keep your toolbox updated! Thanks @phordiienko!
-
-### Chapter 07
-
-* Later versions of Frida introducing breaking changes to the API that may cause the `hook.py` script to fail with errors such as `frida.ProcessNotRespondingError`. While you may want to adapt your script for newer versions of Frida, you can get the examples to work by downgrading with `pip install frida-tools==10.8.0`. Thanks @pudii!
 
 ## Contributing
 
