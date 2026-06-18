@@ -20,6 +20,7 @@ Tech changes constantly, especially the tools used in vulnerability research. Wh
 ### Chapter 03
 
 * Some versions of Semgrep may error out on the examples with messages like `Syntax error at line expat/lib/xmlparse.c`. You can use the version **1.80.0** to avoid this issue; install it with `python3 -m pip install semgrep==1.80.0` or follow the instructions at https://semgrep.dev/docs/kb/semgrep-code/run-specific-version depending on your installation method. To get the exact same output as that in the book, use version **1.36.0**. Thanks @0xFA7E!
+* Older versions of CodeQL used in the book are no longer supported by the VS Code CodeQL extension. One working combination of versions is CodeQL v2.25.1 and CodeQL VSCode extension v1.17.7. Thanks, @MarwanNour!
 
 ### Chapter 05
 
